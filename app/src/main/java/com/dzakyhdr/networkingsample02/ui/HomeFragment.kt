@@ -53,6 +53,11 @@ class HomeFragment : Fragment() {
                 Snackbar.make(binding.root, "Terjadi Masalah", Snackbar.LENGTH_LONG).show()
             }
         })
+
+        binding.fab.setOnClickListener {
+            val add = RegisterUserFragment()
+            add.show(childFragmentManager, "add")
+        }
     }
 
     private fun showData(body: List<CarResponseItem>?) {
