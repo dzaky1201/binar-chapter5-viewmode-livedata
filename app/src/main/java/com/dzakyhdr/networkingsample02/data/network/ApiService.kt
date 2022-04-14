@@ -1,14 +1,17 @@
 package com.dzakyhdr.networkingsample02.data.network
 
+import com.dzakyhdr.networkingsample02.data.auth.LoginRequest
 import com.dzakyhdr.networkingsample02.data.model.CarResponseItem
 import com.dzakyhdr.networkingsample02.data.model.RegisterResponseItem
-import com.dzakyhdr.networkingsample02.data.register.RegisterRequest
+import com.dzakyhdr.networkingsample02.data.auth.RegisterRequest
+import com.dzakyhdr.networkingsample02.data.model.LoginResponseItem
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import java.util.concurrent.TimeUnit
@@ -21,6 +24,10 @@ interface ApiService {
 
     @POST(EndPoint.Register.REGISTER_USER)
     fun registerUser(@Body request: RegisterRequest): Call<RegisterResponseItem>
+
+
+    @POST(EndPoint.Login.LOGIN_USER)
+    fun loginUser(@Body request: LoginRequest): Call<LoginResponseItem>
 
 }
 
@@ -55,5 +62,9 @@ object EndPoint {
 
     object Register {
         const val REGISTER_USER = "/admin/auth/register"
+    }
+
+    object Login {
+        const val LOGIN_USER = "/admin/auth/login"
     }
 }

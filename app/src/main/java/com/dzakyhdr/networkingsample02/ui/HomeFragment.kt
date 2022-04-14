@@ -54,10 +54,6 @@ class HomeFragment : Fragment() {
             }
         })
 
-        binding.fab.setOnClickListener {
-            val add = RegisterUserFragment()
-            add.show(childFragmentManager, "add")
-        }
     }
 
     private fun showData(body: List<CarResponseItem>?) {

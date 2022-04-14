@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/loginUserFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -13,6 +13,10 @@
         <action
             android:id="@+id/action_homeFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_loginUserFragment"
+            app:destination="@id/loginUserFragment"
+            app:popUpTo="@id/main_nav" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
@@ -22,5 +26,27 @@
         <argument
             android:name="car"
             app:argType="com.dzakyhdr.networkingsample02.data.model.CarResponseItem" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginUserFragment"
+        android:name="com.dzakyhdr.networkingsample02.ui.LoginUserFragment"
+        android:label="LoginUserFragment"
+        tools:layout="@layout/fragment_login_user">
+        <action
+            android:id="@+id/action_loginUserFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_loginUserFragment_to_registerUserFragment"
+            app:destination="@id/registerUserFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerUserFragment"
+        android:name="com.dzakyhdr.networkingsample02.ui.RegisterUserFragment"
+        android:label="RegisterUserFragment"
+        tools:layout="@layout/fragment_register_user">
+        <action
+            android:id="@+id/action_registerUserFragment_to_loginUserFragment"
+            app:destination="@id/loginUserFragment"
+            app:popUpTo="@id/main_nav" />
     </fragment>
 </navigation>

@@ -1,4 +1,4 @@
-package com.dzakyhdr.networkingsample02.data.register
+package com.dzakyhdr.networkingsample02.data.auth
 
 
 import android.os.Parcelable
@@ -6,11 +6,9 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class RegisterRequest(
+data class LoginRequest(
     @SerializedName("email")
     val email: String?,
     @SerializedName("password")
-    val password: String?,
-    @SerializedName("role")
-    val role: String?
+    val password: String?
 ): Parcelable
