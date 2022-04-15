@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "NetworkingSample02"
+rootProject.name = "ViewModel-3-4"
 include ':app'
