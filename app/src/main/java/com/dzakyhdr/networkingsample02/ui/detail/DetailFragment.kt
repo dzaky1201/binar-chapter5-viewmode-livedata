@@ -1,4 +1,4 @@
-package com.dzakyhdr.networkingsample02.ui
+package com.dzakyhdr.networkingsample02.ui.detail
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,7 +9,6 @@ import com.bumptech.glide.Glide
 import com.dzakyhdr.networkingsample02.R
 import com.dzakyhdr.networkingsample02.data.model.CarResponseItem
 import com.dzakyhdr.networkingsample02.databinding.FragmentDetailBinding
-import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
 

@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.dzakyhdr.networkingsample02.R
 import com.dzakyhdr.networkingsample02.data.model.CarResponseItem
 import com.dzakyhdr.networkingsample02.databinding.ItemCarBinding
+import com.dzakyhdr.networkingsample02.ui.home.HomeFragmentDirections
 import java.text.NumberFormat
 import java.util.*
 
