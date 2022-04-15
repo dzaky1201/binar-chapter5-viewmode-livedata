@@ -54,14 +54,13 @@ class LoginViewModel(
         this.password = password
     }
 
-    fun setDefault(){
+    fun setDefault() {
         _status.value = false
     }
 
-    fun loginSession(){
+    fun loginSession() {
         _moveToHome.value = sharedPreference.getPrefKeyStatus("login_status")
     }
-
 
 
 }

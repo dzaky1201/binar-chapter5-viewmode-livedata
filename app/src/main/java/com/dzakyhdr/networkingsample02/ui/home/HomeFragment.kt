@@ -6,24 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dzakyhdr.networkingsample02.R
 import com.dzakyhdr.networkingsample02.data.model.CarResponseItem
-import com.dzakyhdr.networkingsample02.data.network.ApiClient
 import com.dzakyhdr.networkingsample02.databinding.FragmentHomeBinding
 import com.dzakyhdr.networkingsample02.ui.CarAdapter
-import com.google.android.material.snackbar.Snackbar
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.dzakyhdr.networkingsample02.utils.SharedPreference
 
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: HomeViewModel by lazy {
-        ViewModelProvider(requireActivity())[HomeViewModel::class.java]
-    }
+    private var sharedPref: SharedPreference? = null
+    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var homeViewModelFactory: HomeViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,18 +33,49 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.cars.observe(viewLifecycleOwner) {
+
+        sharedPref = SharedPreference(view.context)
+        homeViewModelFactory = HomeViewModelFactory(sharedPref!!)
+        homeViewModel = ViewModelProvider(
+            requireActivity(),
+            homeViewModelFactory
+        )[HomeViewModel::class.java]
+
+        homeViewModel.getCar()
+
+        homeViewModel.cars.observe(viewLifecycleOwner) {
             showData(it)
         }
 
-        viewModel.loading.observe(viewLifecycleOwner) {
+        binding.homeToolbar.inflateMenu(R.menu.home_menu)
+
+        homeViewModel.email.observe(viewLifecycleOwner){
+            binding.txtUsername.text = it
+        }
+
+
+        homeViewModel.loading.observe(viewLifecycleOwner) {
             if (it) {
                 binding.loading.visibility = View.VISIBLE
             } else {
                 binding.loading.visibility = View.GONE
             }
         }
+
+        binding.homeToolbar.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.logout -> {
+                    homeViewModel.logOut()
+                    findNavController().navigate(R.id.action_homeFragment_to_loginUserFragment)
+                    true
+                }
+                else -> false
+            }
+        }
+
+
     }
+
 
     private fun showData(body: List<CarResponseItem>?) {
         val adapter = CarAdapter()
