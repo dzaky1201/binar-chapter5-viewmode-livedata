@@ -6,31 +6,32 @@ import androidx.lifecycle.ViewModel
 import com.dzakyhdr.networkingsample02.data.model.CarResponseItem
 import com.dzakyhdr.networkingsample02.data.network.ApiClient
 import com.dzakyhdr.networkingsample02.data.network.ApiService
+import com.dzakyhdr.networkingsample02.utils.SharedPreference
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeViewModel: ViewModel() {
-    private var _cars =  MutableLiveData<List<CarResponseItem>>()
+class HomeViewModel(private val sharedPreference: SharedPreference) : ViewModel() {
+    private var _cars = MutableLiveData<List<CarResponseItem>>()
     val cars: LiveData<List<CarResponseItem>> get() = _cars
 
     private var _loading = MutableLiveData<Boolean>()
     val loading get() = _loading
 
+    private var _email = MutableLiveData<String>()
+    val email get() = _email
 
-    init {
-        getCar()
-    }
 
-    private fun getCar(){
-        ApiClient.instance.getAllCar().enqueue(object : Callback<List<CarResponseItem>>{
+    fun getCar() {
+        ApiClient.instance.getAllCar().enqueue(object : Callback<List<CarResponseItem>> {
             override fun onResponse(
                 call: Call<List<CarResponseItem>>,
                 response: Response<List<CarResponseItem>>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     _cars.value = response.body()
                     _loading.value = false
+                    _email.value = sharedPreference.getPrefKey("email")
                 } else {
                     _loading.value = true
                 }
@@ -40,5 +41,14 @@ class HomeViewModel: ViewModel() {
                 _loading.value = true
             }
         })
+    }
+
+    fun logOut() {
+        sharedPreference.clearUsername()
+        _email.value = ""
+    }
+
+    override fun onCleared() {
+        super.onCleared()
     }
 }
