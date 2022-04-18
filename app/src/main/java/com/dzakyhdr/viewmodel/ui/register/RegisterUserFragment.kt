@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.dzakyhdr.viewmodel.R
 import com.dzakyhdr.viewmodel.data.model.RegisterResponseItem
@@ -23,6 +24,7 @@ class RegisterUserFragment : Fragment() {
 
     private var _binding: FragmentRegisterUserBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: RegisterViewModel by lazy { ViewModelProvider(requireActivity())[RegisterViewModel::class.java] }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,35 +40,29 @@ class RegisterUserFragment : Fragment() {
         binding.apply {
             btnRegister.setOnClickListener {
 
-                val register = RegisterRequest(
-                    edtEmail.text.toString(),
-                    edtPassword.text.toString(),
-                    "admin"
-                )
+                val email = binding.edtEmail.text.toString()
+                val password = binding.edtPassword.text.toString()
 
-                ApiClient.instance.registerUser(register).enqueue(object : Callback<RegisterResponseItem>{
-                    override fun onResponse(
-                        call: Call<RegisterResponseItem>,
-                        response: Response<RegisterResponseItem>
-                    ) {
-                        Log.d("RegisterUserFragment", "${response.body()}")
-                        findNavController().navigate(R.id.action_registerUserFragment_to_loginUserFragment)
-                        Snackbar.make(binding.root, "User Behasil Dibuat", Snackbar.LENGTH_LONG).show()
-                    }
+                if (binding.edtEmail.text.isNullOrBlank() || binding.edtPassword.text.isNullOrBlank()) {
+                    Snackbar.make(binding.root, "Lengkapi Field diatas", Snackbar.LENGTH_LONG)
+                        .show()
+                } else {
+                    viewModel.registerRequest(email, password)
+                }
 
-                    override fun onFailure(call: Call<RegisterResponseItem>, t: Throwable) {
-                        Toast.makeText(requireContext(), "gagal registrasi", Toast.LENGTH_SHORT)
+                viewModel.registerResponse()
+
+                viewModel.showSnackbar.observe(viewLifecycleOwner) {
+                    if (it) {
+                        Snackbar.make(binding.root, "User Berhasil Dibuat", Snackbar.LENGTH_LONG)
                             .show()
+                        findNavController().navigate(RegisterUserFragmentDirections.actionRegisterUserFragmentToLoginUserFragment())
+                    } else {
+                        Snackbar.make(binding.root, "User Sudah Ada", Snackbar.LENGTH_LONG).show()
                     }
-                })
-
-
-
+                }
 
             }
-
-
-
         }
     }
 

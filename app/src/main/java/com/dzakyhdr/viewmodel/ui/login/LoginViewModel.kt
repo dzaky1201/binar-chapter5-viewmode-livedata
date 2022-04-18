@@ -23,6 +23,7 @@ class LoginViewModel(
     private var _status = MutableLiveData<Boolean>()
     val status: LiveData<Boolean> = _status
 
+
     fun login() {
         val login = LoginRequest(email, password)
         ApiClient.instance.loginUser(login).enqueue(object : Callback<LoginResponseItem> {
@@ -30,15 +31,13 @@ class LoginViewModel(
                 call: Call<LoginResponseItem>,
                 response: Response<LoginResponseItem>
             ) {
-                val body = response.body()
-
                 if (response.isSuccessful) {
                     _status.value = true
+                    val body = response.body()
                     sharedPreference.saveKey(body?.email!!, body.password!!)
                     sharedPreference.saveKeyState(true)
                 } else {
                     _status.value = false
-
                 }
 
             }
@@ -61,6 +60,9 @@ class LoginViewModel(
     fun loginSession() {
         _moveToHome.value = sharedPreference.getPrefKeyStatus("login_status")
     }
+
+
+
 
 
 }

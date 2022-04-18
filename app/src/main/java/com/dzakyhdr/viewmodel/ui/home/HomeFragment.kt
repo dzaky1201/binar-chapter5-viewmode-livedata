@@ -20,8 +20,10 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private var sharedPref: SharedPreference? = null
+
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var homeViewModelFactory: HomeViewModelFactory
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +43,13 @@ class HomeFragment : Fragment() {
             homeViewModelFactory
         )[HomeViewModel::class.java]
 
-        homeViewModel.getCar()
+        homeViewModel.loading.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.loading.visibility = View.VISIBLE
+            } else {
+                binding.loading.visibility = View.GONE
+            }
+        }
 
         homeViewModel.cars.observe(viewLifecycleOwner) {
             showData(it)
@@ -54,14 +62,6 @@ class HomeFragment : Fragment() {
         }
 
 
-        homeViewModel.loading.observe(viewLifecycleOwner) {
-            if (it) {
-                binding.loading.visibility = View.VISIBLE
-            } else {
-                binding.loading.visibility = View.GONE
-            }
-        }
-
         binding.homeToolbar.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.logout -> {
@@ -72,6 +72,8 @@ class HomeFragment : Fragment() {
                 else -> false
             }
         }
+
+        homeViewModel.getCar()
 
 
     }
