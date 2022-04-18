@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.dzakyhdr.viewmodel.R
@@ -14,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 
 
 class LoginUserFragment : Fragment() {
+
 
     private var _binding: FragmentLoginUserBinding? = null
     private val binding get() = _binding!!
@@ -40,8 +42,9 @@ class LoginUserFragment : Fragment() {
         )[LoginViewModel::class.java]
 
         viewModel.loginSession()
-        viewModel.moveToHome.observe(viewLifecycleOwner){
-            if (it){
+
+        viewModel.moveToHome.observe(viewLifecycleOwner) {
+            if (it) {
                 findNavController().navigate(R.id.action_loginUserFragment_to_homeFragment)
             }
         }
